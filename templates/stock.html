@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ ticker }} 주식 정보</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header style="text-align: center;">
+        <h1>{{ ticker }} 주식 정보</h1>
+    </header>
+    <main style="text-align: center;">
+        <h2>주가</h2>
+        <img src="{{ url_for('static', filename=ticker + '_stock_price.png') }}" alt="{{ ticker }} 주가 추이" style="max-width: 80%; height: auto;">
+        <h2>rsi</h2>
+        <img src="{{ url_for('static', filename=ticker + '_stock_rsi.png') }}" alt="{{ ticker }} rsi" style="max-width: 80%; height: auto;">
+        
+        
+        
+        <table style="margin: 0 auto;">
+			<tr>
+                <td>per</td> <td>{{per}}</td>
+            </tr>   
+            <tr>
+	            <td>forward per</td><td>{{forward_per}}</td>
+            </tr>
+    	</table>
+    </main>
+</body>
+    <a href="/../.." class="home-button">돌아가기</a>
+</html>

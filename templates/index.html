@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>hideh's portfolio</title>
+</head>
+<body>
+    
+        <div class="search" style="text-align: center;">
+            <h3>주식 검색</h3>
+            <form action="/search" method="post">
+                <input type="text" name="ticker" placeholder="종목 코드 입력" required>
+                <button type="submit">검색</button>
+            </form>
+        </div>
+    <div class="container">
+        <h2 style="color : black; text-align: center">
+            차트
+        </h2>
+        <div class="chart" style="text-align: center;">
+            <img src="{{ pie_chart }}" alt="포트폴리오 구성 원그래프">
+        </div>
+        <div class="chart" style="text-align: center;">
+            <img src="{{ pie_chart2 }}">
+        </div>
+
+
+        <h2 style="color : black; text-align: center">
+            종합 정보
+        </h2>
+        <table style="margin: 0 auto;">
+			<tr>
+                <th>원금금액</th>
+                <th>평가금액</th>
+                <th>현재 수익률($)</th>
+                <th>전체 수익률(₩)</th>
+                <th>포트폴리오 베타</th>
+            </tr>          
+            <tr>
+                <td>{{ origin }} 원</td>
+                <td>{{ now }} 원</td>
+                <td>{{ current_return }}%</td>
+                <td>{{ total_return }}%</td>
+                <td>{{ total_beta }}</td>
+            </tr>
+    	</table>
+        <h2 style="color : black; text-align: center">
+            보유 미국 주식
+        </h2>
+        <table style="margin: 0 auto;">
+            <tr>
+                <th>종목 티커</th>
+                <th>개수</th>
+                <th>원화 평가금액</th>
+                <th>비중</th>
+                <th>현재 주가</th>
+                <th>구매 평단가</th>
+                <th>종목 수익률</th>
+                <th>베타</th>
+            </tr>
+            {% for index, row in portfolio.iterrows() %}
+            <tr>
+                <td><a href="{{ url_for('stock', ticker=row['Ticker']) }}">{{ row['Ticker'] }}</a></td>
+                <td>{{ row['Number of Shares'] }}</td>
+                <td>{{ row['value'] }}₩</td>
+                <td>{{ row['percent']}}%</td>
+                <td>{{ row['Current Price'] }}$</td>
+                <td>{{ row['Purchase Price'] }}$</td>
+                <td>{{ row['Return'] }}%</td>
+                <td>{{ row['Beta']  }}</td>  <!-- 베타값 소수점 둘째자리 -->
+            </tr>
+            {% endfor %}
+            <tr>
+                <td>예수금</td>
+                <td>-</td>
+                <td>{{cash_value}}₩</td>
+                <td>{{cash_rate}}%</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+            </tr>            
+        </table>
+
+        
+        <h2 style="color : black; text-align: center">
+            보유 한국 주식
+        </h2>
+        <table style="margin: 0 auto;">
+            <tr>
+                <th>종목명</th>
+                <th>보유수량</th>
+                <th>원화 평가금액</th>
+                <th>비중</th>
+                <th>현재 주가</th>
+                <th>구매 평단가</th>
+                <th>종목 수익률</th>
+            </tr>
+            {% for index, row in koreainfo.iterrows() %}
+            <tr>
+                <td><a href="{{ url_for('stock', ticker=row['Ticker']) }}">{{ row['name'] }}</a></td>
+                <td>{{ row['Number of Shares'] }}</td>
+                <td>{{ row['value'] }}₩</td>
+                <td>{{ row['percent']}}%</td>
+                <td>{{ row['Current Price'] }}$</td>
+                <td>{{ row['Purchase Price'] }}$</td>
+                <td>{{ row['Return'] }}%</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <h2 style="color : black; text-align: center">
+            현금 구성
+        </h2>
+        <table style="margin: 0 auto;">
+            <tr>
+                <th> </th>
+            	<th>액수</th>
+                <th>평가금액</th>
+                <th>평균 구매 환율</th>
+                <th>현재 환율</th>
+                <th>환차손(₩)</th>
+                <th>환차손비(%)</th>
+            </tr>
+            {%for index, row in cash.iterrows() %}
+            <tr>
+                <td><a href="/exch ">{{ row['Ticker'] }}</a></td>
+                <td>{{ row['Number of Shares'] 	}}</td>
+                <td>{{ row['value']				}}</td>
+                <td>{{ row['Purchase Price'] 	}}</td>
+                <td>{{ row['Convert Price'] 	}}</td>
+                <td>{{ row['gaeiduc']  }}₩</td>
+                <td>{{ row['Return']			}}</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <div class="performance-chart" style="text-align: center;">
+            <!-- 지난 6개월간 수익률 비교 그래프 추가 -->
+            <!-- matplotlib를 사용하여 그래프 생성 후 이미지로 보여주기 -->
+        </div>        
+        <h2 style="color : black; text-align: center">
+            가격 추이
+        </h2>
+        <div class="chart" style="text-align: center;">
+            <img src="/static/total_price.png" alt="가격 추이 그래프">
+        </div>
+        <div class="chart" style="text-align: center;">
+            <img src="/static/total_rsi.png" alt="rsi 그래프">
+        </div>
+
+
+    </div>
+</body>
+</html>
